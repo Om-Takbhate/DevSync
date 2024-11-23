@@ -3,8 +3,6 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 
-const port = 7777
-
 
 
 app.use('/test',(req,res)=>{
@@ -16,6 +14,6 @@ app.use('/hello',(req,res)=>{
 })
 
 
-app.listen(port,()=>{
-    console.log(`app is listening on port ${port}`);
+app.listen(process.env.PORT,()=>{
+    console.log(`app is listening on port ${process.env.PORT}`);
 })
