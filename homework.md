@@ -10,4 +10,4 @@ differernce between app.use()  and  app.all()
 
 
 write a dummy auth middleware for admin
-write a dummy auth middleware for user
+write a dummy auth middleware for user except for login
