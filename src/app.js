@@ -12,21 +12,10 @@ app.use(express.json())
  
 
 app.post('/signup',async (req,res)=>{
-    // let {firstName,lastName,emailId,password,age,gender} = req.body
-    req.body.hi = "hi"
-    console.log(req.body);
-    //wrap inside try-catch block
-    // try{
-    //     let user = new User({firstName,lastName,emailId,password,age,gender})
-    //     console.log(user);
-    //     await user.save()
-    //     console.log('user saved to collection');
-    //     res.send('User data saved')
-    // }
-    // catch(err){
-    //     res.status(400).send('Error while saving the user')
-    // }
-    res.send('')
+    let user = new User(req.body)
+    await user.save()
+    console.log('User saved!');
+    res.send('User saved successfully')
 })
 
 
