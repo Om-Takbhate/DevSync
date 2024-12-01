@@ -31,3 +31,10 @@ create schema of user and use similar fields of user like name,emial,pass and et
 
 create post /signup api to save the data of user in mongodb
 make api call to post /api to save data in db
+
+
+
+//////
+difference between json and js object
+implement express.json middleware , send the data from body of req from postman
+make signup api dynamic to recieve data from the end user or client
