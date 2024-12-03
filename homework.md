@@ -38,3 +38,10 @@ make api call to post /api to save data in db
 difference between json and js object
 implement express.json middleware , send the data from body of req from postman
 make signup api dynamic to recieve data from the end user or client
+
+find which document does Model.findOne() returns the first found one or the last one  or any random
+
+create a api to get the user - GET /user
+create a api to get the all users - GET /feed
+use function = findById()
+difference between put and patch HTTP method
