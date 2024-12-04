@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const {connectToDB} = require('./config/database.js')
 require('./config/database')
+const mongoose = require('mongoose')
 const {User} = require('./models/user.js')
 
 
@@ -12,14 +13,15 @@ app.use(express.json())
 
 //to find a user based on email
 app.get('/user',async (req,res)=>{
-    let userEmail = req.body.emailId8
+    let userId = req.body.userId
     try{
-        let users = await User.findOne()
-        if(users.length === 0){
+        let user = await User.findOne({_id : userId})
+        if(!user){
             res.status(404).send(`No user found with email ${userEmail}`)
         }
         else{
-            res.send(users)
+            console.log(user.firstName);
+            res.send(user)
         }
     }
     catch(err){
@@ -72,7 +74,7 @@ app.patch('/user',async (req,res,next)=>{
     try{
         // let user = await User.findOneAndUpdate({_id:userId},req.body)
         // let user = await User.updateOne({_id:userId},req.body)
-        let user = await User.findOneAndUpdate({_id:userId},req.body,{returnDocument:'after'})
+        let user = await User.findOneAndUpdate({_id:userId},req.body,{returnDocument:'after',runValidators:true})
         if(!user){
             res.status(404).send(`No user found with id ${userId}`)
         }
