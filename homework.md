@@ -45,3 +45,11 @@ create a api to get the user - GET /user
 create a api to get the all users - GET /feed
 use function = findById()
 difference between put and patch HTTP method
+
+
+
+
+/////////////////////////
+- Explor scheme type options from the document
+- add required , unique , lowercase , validate , minLength , maxLength , min,max ,  trim : true , get,set,default
+- Add timestamps on schema for createdAt and udpatedAt in document automatiocallly
