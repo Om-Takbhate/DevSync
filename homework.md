@@ -53,3 +53,9 @@ difference between put and patch HTTP method
 - Explor scheme type options from the document
 - add required , unique , lowercase , validate , minLength , maxLength , min,max ,  trim : true , get,set,default
 - Add timestamps on schema for createdAt and udpatedAt in document automatiocallly
+
+
+
+////////////
+- add api levep validation on PATCH and POST request api
+- data sanitizing - Add api validation for each field

@@ -69,19 +69,24 @@ app.delete('/user',async(req,res)=>{
 
 
 //patch api
-app.patch('/user',async (req,res,next)=>{
-    let userId = req.body.userId
+app.patch('/user/:userId',async (req,res,next)=>{
+    let data = req.body
+
+    
     try{
+        const allowedKeys = ["password","about","skills","firstName","lastName","age","gender","photoUrl"]
+
+        const isUpdateAllowed = Object.keys(data).every((k) => 
+            allowedKeys.includes(k)
+        )
+        if(data.skills?.length > 10) throw new Error("Skills cannot be more than 10")
+        if(!isUpdateAllowed) throw new Error('Update not allowed')
         // let user = await User.findOneAndUpdate({_id:userId},req.body)
         // let user = await User.updateOne({_id:userId},req.body)
-        let user = await User.findOneAndUpdate({_id:userId},req.body,{returnDocument:'after',runValidators:true})
-        if(!user){
-            res.status(404).send(`No user found with id ${userId}`)
-        }
-        else{
-            console.log(user);
-            res.send('User updated successfully')
-        }
+        let user = await User.findOneAndUpdate({_id:req.params.userId},data,{returnDocument:'after',runValidators:true})
+        if(!user) throw new Error(`No user found with id ${req.query.userId}`)
+        console.log(user);
+        res.send('User updated successfully')
     }
     catch(err){
         next(err)
