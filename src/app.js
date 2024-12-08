@@ -55,8 +55,8 @@ app.post('/signup',async (req,res,next)=>{
 
 
 //delete user api
-app.delete('/user',async(req,res)=>{
-    let userId = req.body.userId
+app.delete('/user/:userId',async(req,res)=>{
+    let userId = req.params.userId
     try{
         let user = await User.findByIdAndDelete(userId)
         if(!user) res.status(400).send(`No user found with id ${userId}`)
@@ -79,7 +79,7 @@ app.patch('/user/:userId',async (req,res,next)=>{
         const isUpdateAllowed = Object.keys(data).every((k) => 
             allowedKeys.includes(k)
         )
-        if(data.skills?.length > 10) throw new Error("Skills cannot be more than 10")
+        
         if(!isUpdateAllowed) throw new Error('Update not allowed')
         // let user = await User.findOneAndUpdate({_id:userId},req.body)
         // let user = await User.updateOne({_id:userId},req.body)
