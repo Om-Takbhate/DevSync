@@ -4,12 +4,11 @@ const {connectToDB} = require('./config/database.js')
 require('./config/database')
 const mongoose = require('mongoose')
 const {User} = require('./models/user.js')
-
+const {validateSignupData} = require('./utils/validation.js')
 
 const app = express()
 
 app.use(express.json())
-
 
 //to find a user based on email
 app.get('/user',async (req,res)=>{
@@ -44,6 +43,9 @@ app.get('/feed',async (req,res)=>{
 app.post('/signup',async (req,res,next)=>{
     let user = new User(req.body)
     try{
+        //validate user data
+        validateSignupData(req)
+
         await user.save()
         console.log('User saved!');
         res.send('User saved successfully')
