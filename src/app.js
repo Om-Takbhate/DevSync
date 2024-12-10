@@ -5,7 +5,7 @@ require('./config/database')
 const mongoose = require('mongoose')
 const {User} = require('./models/user.js')
 const {validateSignupData} = require('./utils/validation.js')
-
+const bcrypt = require('bcrypt')
 const app = express()
 
 app.use(express.json())
@@ -41,19 +41,53 @@ app.get('/feed',async (req,res)=>{
 })
 
 app.post('/signup',async (req,res,next)=>{
-    let user = new User(req.body)
     try{
+        
+        //extract the data
+        const {firstName,lastName,emailId,password} = req.body
+        
         //validate user data
         validateSignupData(req)
 
+        //hash the password
+        const hashPassword = await bcrypt.hash(password,10)
+
+        //saving the document of user with hashed password value
+        let user = new User({
+            firstName,lastName,emailId,password:hashPassword
+        })
+    
         await user.save()
-        console.log('User saved!');
         res.send('User saved successfully')
     }
     catch(err){
         res.status(400).send(err.message)
     }
 })
+
+
+//login route
+app.post('/login',async (req,res)=>{
+    try {
+        const {emailId,password} = req.body
+
+        //check if user exists with given email id
+        let user = await User.findOne({emailId : emailId})
+        if(!user) throw new Error(`Invalid credentials`)
+        
+        //compare the stored hash for respective emailId as password with the hash for the given password for logging in
+        let isMatch = await bcrypt.compare(password,user.password)
+        if(!isMatch) throw new Error('Invalid credentials')
+        else {
+            res.send('')
+        }
+    }
+    catch(err) {
+        res.status(400).send(err.message)
+    }
+})
+
+
 
 
 //delete user api

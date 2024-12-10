@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     emailId : {
         type:String,
-        required:[true,"Email id id required"],
+        required:[true,"Email id required"],
         unique : [true,"User already exists with the given email"],
         validate : (email)=>{
             if(!validator.isEmail(email)){
