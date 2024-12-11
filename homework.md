@@ -59,3 +59,8 @@ difference between put and patch HTTP method
 ////////////
 - add api levep validation on PATCH and POST request api
 - data sanitizing - Add api validation for each field
+
+////////
+- create passwordHash using bcrypt.hash function & save the user's password as hashedpassword
+- create login api that takes emailId and password , check if user is present in DB with given emailId or not , if yes then compare the given password while logging in with the hash value stored in dB for original password
+- if both got matched send login success , else invalid credentials
