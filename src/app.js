@@ -6,9 +6,17 @@ const mongoose = require('mongoose')
 const {User} = require('./models/user.js')
 const {validateSignupData} = require('./utils/validation.js')
 const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser')
+
+
+
+
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
+
+
 
 //to find a user based on email
 app.get('/user',async (req,res)=>{
@@ -79,7 +87,10 @@ app.post('/login',async (req,res)=>{
         let isMatch = await bcrypt.compare(password,user.password)
         if(!isMatch) throw new Error('Invalid credentials')
         else {
-            res.send('')
+            //password gets matched
+            //send the token to client , named as token 
+            res.cookie('token','sbdfljishdfdfskyuff874wevbfwsfhwsl98p374')
+            res.send('Login Successful!!!')
         }
     }
     catch(err) {
@@ -87,6 +98,15 @@ app.post('/login',async (req,res)=>{
     }
 })
 
+
+app.get('/profile',(req,res)=>{
+    //check whether cookies are coming from the req or not
+    const cookies = req.cookies
+    console.log(cookies);
+    const {token} = cookies
+    console.log(`token - ${token}`);
+    res.send('Reading cookies')
+})
 
 
 

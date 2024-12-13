@@ -4,17 +4,16 @@ const validateSignupData = function(req){
     const {firstName , emailId, password} = req.body
 
     if(!firstName) {
-        throw new Error("First name is required br")
+        throw new Error("First name is required")
     }
     if(!emailId) {
         throw new Error("Enter email id")
     }
     else if(!validator.isEmail(emailId)){
-        throw new Error("Stupid , enter correct email id")
+        throw new Error("Enter correct email id")
     }
     else if(!validator.isStrongPassword(password)) {
-        throw new Error("Stupid , enter strong password")
-
+        throw new Error("Enter strong password")
     }
 }
 
