@@ -15,7 +15,7 @@ const validateSignupData = function(req){
     else if(!validator.isStrongPassword(password)) {
         throw new Error("Enter strong password")
     }
-}
+}   
 
 
 module.exports = {
