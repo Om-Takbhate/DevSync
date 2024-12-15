@@ -64,3 +64,10 @@ difference between put and patch HTTP method
 - create passwordHash using bcrypt.hash function & save the user's password as hashedpassword
 - create login api that takes emailId and password , check if user is present in DB with given emailId or not , if yes then compare the given password while logging in with the hash value stored in dB for original password
 - if both got matched send login success , else invalid credentials
+
+
+- after successfull login , create jwt token send it to client by wrapping it inside the cookies ,=> res.cookie() emthod .
+- implement userAuth middleware , that checks whether the cookies  sent to server in req are valid , is jwt token present in this or not , if present , verify cookie using the jwt.verify method
+
+- use userAuth middleware function in /profile and /sendConnectionRequest
+- set the expiry date of token and cookie of 7 days
