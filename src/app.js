@@ -85,15 +85,17 @@ app.post('/login',async (req,res)=>{
         if(!user) throw new Error(`Invalid credentials`)
         
         //compare the stored hash for respective emailId as password with the hash for the given password for logging in
-        let isMatch = await bcrypt.compare(password,user.password)
+        //since the comparing password is the closely related method to userSChema so we attach the validatePassword method to userSchema in user.js in models
+        let isMatch = await user.validatePassword(password)
         if(!isMatch) throw new Error('Invalid credentials')
         else {
             //password gets matched
             //create a jwt token 
             //this token expires in 20 seconds
-            const token = jwt.sign({_id : user._id},"DEV@Tinder#123",{expiresIn : '7d' })
+            //generating token from userSchema related method .getJWT()
+            const token = await user.getJWT()
 
-            
+
             //send the jwt token to client by wrapping inside the cookie
             //send the token to client , named as token 
             //setting cookie that will expire in 7 days
