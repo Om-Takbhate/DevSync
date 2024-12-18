@@ -71,3 +71,11 @@ difference between put and patch HTTP method
 
 - use userAuth middleware function in /profile and /sendConnectionRequest
 - set the expiry date of token and cookie of 7 days
+
+
+
+////////////////////////////////////////////////////////
+
+- explore Tinder.com , check how tinder structures the apis
+- create list of all apis required , you can think of DEVTINDER
+- group all related apis under the single router
