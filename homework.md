@@ -79,3 +79,5 @@ difference between put and patch HTTP method
 - explore Tinder.com , check how tinder structures the apis
 - create list of all apis required , you can think of DEVTINDER
 - group all related apis under the single router
+- import routers in app.js
+- use middlewares to send the request to its correct router
