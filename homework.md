@@ -82,5 +82,15 @@ difference between put and patch HTTP method
 - import routers in app.js
 - use middlewares to send the request to its correct router
 
+
+////// indexes
+- what are indexes
+- advantages and disadvantages of indexes
+
+
 - implement PATCH /profile/edit and PATCH /profile/edit/password
 - implement /send/request/:status/:toUserId route to send request to other devs
+
+///// review request route
+- implement /request/review/:status/:requestId route -> make sure toUserId is same as _id of loggedInUser , the status of request is interested and the id of request is equal to requestId , then only we can review request 
+- make sure status is either "accept" or "reject" of request route or path

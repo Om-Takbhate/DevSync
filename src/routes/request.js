@@ -51,6 +51,48 @@ requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
         res.status(400).send({message : err.message})
     }
 })
+
+
+requestRouter.post('/request/review/:status/:requestId',userAuth,async(req,res) => {
+    try{
+        //the connectionRequest document must have toUserId equals to id of loggedInUser , then only he can review request
+        //validate the status , must be either -> "accepted" or "rejected"
+        //status of connectionRequest must be interested , then only loggedInUser can review it
+
+        const loggedInUser = req.user
+        const { status } = req.params
+        const { requestId } = req.params
+
+        //check if status is valid or not
+        const allowedStatus = ["accepted","rejected"]
+
+        if(!allowedStatus.includes(status)) {
+            throw new Error("Invalid status")
+        }
+        
+        
+        //check if is there any request with requestId in connectionRouter
+        const connectionRequest = await ConnectionRequest.findOne({
+            _id : requestId,
+            toUserId : loggedInUser._id,
+            status : "interested"
+        })
+
+        //if request id not found
+        if(!connectionRequest) {
+            throw new Error("No connection request found!")
+        }
+
+        //if request is found
+        connectionRequest.status = status
+        await connectionRequest.save()
+
+        res.send({message : 'Connection request '+status})
+    }
+    catch(err) {
+        res.status(400).send({error : err.message})
+    }
+})
         
 
 
