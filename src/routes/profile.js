@@ -26,7 +26,8 @@ profileRouter.patch('/profile/edit',userAuth,async (req,res) => {
 
         const loggedInUser = req.user
         Object.keys(req.body).forEach(key => (loggedInUser[key] = req.body[key]))
-
+        let user = await User.findByIdAndUpdate(loggedInUser._id , loggedInUser,{runValidators : true})
+        req.user = user
         res.send(`${loggedInUser.firstName} your profile is update successfully`)
         
     }
@@ -40,7 +41,6 @@ profileRouter.patch('/profile/edit',userAuth,async (req,res) => {
 profileRouter.patch('/profile/edit/password',userAuth,async (req,res) => {
     try {
         let {currentPassword , newPassword} = req.body
-        console.log(req.user);
         let isPasswordMatch = await bcrypt.compare(currentPassword,req.user.password)
         if(!isPasswordMatch) throw new Error('Invalid Credentials! Failed to update the password')
 

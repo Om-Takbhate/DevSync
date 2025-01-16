@@ -35,14 +35,15 @@ const userSchema = new mongoose.Schema({
     },
     age : {
         type:Number,
+        default : 18,
         min : 18
     },
     gender : {
         type:String,
-        trim : true,
+        default : "not mentioned",
         enum : {
-            values : ["male","female","other"],
-            message : "Invalid gender"
+            values : ["male","female","other","not mentioned"],
+            message : `{VALUE} is not a valid gender`
         }
     },
     photoUrl : {
