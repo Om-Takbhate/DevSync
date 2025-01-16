@@ -81,3 +81,6 @@ difference between put and patch HTTP method
 - group all related apis under the single router
 - import routers in app.js
 - use middlewares to send the request to its correct router
+
+- implement PATCH /profile/edit and PATCH /profile/edit/password
+- implement /send/request/:status/:toUserId route to send request to other devs
