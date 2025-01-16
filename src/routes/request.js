@@ -10,26 +10,30 @@ requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
         const fromUserId = req.user._id
         const toUserId = req.params.toUserId
         const status = req.params.status
-
-
+        
+        
         const allowedStatus = ["interested","ignored"]
         if(!allowedStatus.includes(status)) {
             return res.status(400).json({message : "Invalid status type"+status})
         }
-
-
-        //check if there is existing connection request from  fromUserId to toUserId
-        const existingConnectionRequest = await ConnectionRequest.findOne({
-            $or : [{fromUserId , toUserId} , {fromUserId : toUserId ,  toUserId : fromUserId}]
-        })
-
-
-        //check if user with toUserId is even present in out db or not
-
+        
         const toUser = await User.findById(toUserId)
         if(!toUser) {
             throw new Error(`User not found`)
         }
+
+        //check if there is existing connection request from  fromUserId to toUserId
+
+        console.time("dbquery")
+        
+        const existingConnectionRequest = await ConnectionRequest.findOne({
+            $or : [{fromUserId , toUserId} , {fromUserId : toUserId ,  toUserId : fromUserId}]
+        })
+        
+        console.timeEnd("dbquery")
+
+        //check if user with toUserId is even present in out db or not
+
 
         if(existingConnectionRequest) {
             return res.status(400).send({message : "Connection request already exists"})
