@@ -24,13 +24,11 @@ requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
 
         //check if there is existing connection request from  fromUserId to toUserId
 
-        console.time("dbquery")
         
         const existingConnectionRequest = await ConnectionRequest.findOne({
             $or : [{fromUserId , toUserId} , {fromUserId : toUserId ,  toUserId : fromUserId}]
         })
         
-        console.timeEnd("dbquery")
 
         //check if user with toUserId is even present in out db or not
 
