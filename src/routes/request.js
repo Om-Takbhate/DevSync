@@ -34,7 +34,7 @@ requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
 
 
         if(existingConnectionRequest) {
-            return res.status(400).send({message : "Connection request already exists"})
+            return res.status(400).send({message : "Connection request already exists or already connected"})
         }
 
 

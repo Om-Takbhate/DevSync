@@ -29,7 +29,7 @@ POST /request/review/:status/:requestId
 ## userRouter
 // to get connections
 
-GET /user/request/recieved
+GET /user/requests/recieved
 GET /user/connections
 //to get some profiles to explore
 GET /user/feed
