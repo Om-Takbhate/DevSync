@@ -23,10 +23,10 @@ authRouter.post('/signup',async (req,res,next)=>{
         })
     
         await user.save()
-        res.send('User saved successfully')
+        res.send({data : 'User saved successfully'})
     }
     catch(err){
-        res.status(400).send(err.message)
+        res.status(400).send({error : err.message})
     }
 })
 
@@ -56,18 +56,18 @@ authRouter.post('/login',async (req,res)=>{
             //send the token to client , named as token 
             //setting cookie that will expire in 7 days
             res.cookie('token',token,{expires : new Date(Date.now() + ( 168 * 3600000 ))})
-            res.send('Login Successful!!!')
+            res.send({data : 'Login Successful!!!'})
         }
     }
     catch(err) {
-        res.status(400).send(err.message)
+        res.status(400).send({error : err.message})
     }
 })
 
 
 authRouter.post("/logout",(req,res) => {
     res.cookie("token",null,{expires : new Date(Date.now())})
-    res.send('Logout successful')
+    res.send({data : 'Logout successful'})
 })
 
 module.exports = authRouter

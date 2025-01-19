@@ -48,11 +48,11 @@ profileRouter.patch('/profile/edit/password',userAuth,async (req,res) => {
         let newHashedPassword = await bcrypt.hash(newPassword,11)
         let user = await User.findByIdAndUpdate(req.user._id , {password : newHashedPassword}, {returnDocument : 'after'})
         res.cookie("token",null,{expires : new Date(Date.now())})
-        res.json({message : "password updated successful" , date : user})
+        res.json({data : "password updated successful" , data : user})
 
     }
     catch(err) {
-        res.status(400).send(err.message)
+        res.status(400).send({error : err.message})
     }
 })
 

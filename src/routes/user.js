@@ -15,7 +15,7 @@ userRouter.get('/user/requests/recieved',userAuth, async (req,res) => {
             toUserId : loggedInUser._id , 
             status : "interested"
         }).populate("fromUserId",USER_SAFE_DATA)
-        res.send({count : requests.length , message : requests})
+        res.send({count : requests.length , data : requests})
     }
     catch(err) {
         res.status(404).send({error : err.message})
@@ -67,6 +67,9 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //user must not get profile who have sent them request or of users to whom logged in user has sent the request
 
         const loggedInUser = req.user;
+        let page = req.query.page || 1
+        let limit = 10
+
         const connectionRequests = await ConnectionRequest.find({
             $or : [
                 {fromUserId : loggedInUser._id},
@@ -89,7 +92,10 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //finding users whose _id is not present in hiddenUsersFromFeed
         const feedData = await User.find({
             _id : {$nin : Array.from(hiddeUsersFromFeed)}
-        }).select(USER_SAFE_DATA)
+        }).skip((page-1)*limit).limit(limit).select("fromUserId , toUserId ").select(USER_SAFE_DATA)
+
+        //implementing pagination
+
 
 
         res.send({count : feedData.length , data : feedData})

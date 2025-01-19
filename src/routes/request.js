@@ -5,7 +5,7 @@ const {ConnectionRequest} = require('../models/connectionRequest.js')
 const userAuth = require('../middlewares/auth.js')
 
 
-requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
+requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{ 
     try{
         const fromUserId = req.user._id
         const toUserId = req.params.toUserId
