@@ -35,7 +35,7 @@ app.use((err,req,res,next)=>{
 connectToDB()
     .then(()=>{
         console.log('DB connected successfuly');
-        app.listen(process.env.port,'0.0.0.0',()=>{
+        app.listen(process.env.port,()=>{
             console.log(`app is listening on port ${process.env.port}`);
         })
     })
