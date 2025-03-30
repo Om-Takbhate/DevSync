@@ -7,11 +7,10 @@ const cors = require('cors')
 const app = express()
 
 app.use(cors({
-    origin: 'https://devsync-ui.onrender.com', // ✅ Allow frontend origin
-    credentials: true,
-    methods: ['GET','POST','PATCH','UPDATE'],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"] // ✅ Changed string to array
+    origin: ["https://devsync-ui.onrender.com", "http://localhost:3000"], // ✅ Allowed frontend URLs
+    credentials: true // ✅ Required for sending cookies
 }));
+
 app.use(express.json())
 app.use(cookieParser())
 
