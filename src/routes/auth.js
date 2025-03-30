@@ -24,13 +24,12 @@ authRouter.post('/signup', async (req, res, next) => {
 
         const savedUser = await user.save()
         const token = await savedUser.getJWT()
-        res.cookie('token',token,{
+        res.cookie("token", token, {
             httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            secure: true,
-            sameSite: "None",
-            credentials: true
-        })
+            secure: true,  // ✅ Required for cross-site cookies
+            sameSite: "None",  // ✅ Required for cross-site cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ Persist for 7 days
+        });
 
         res.send({ message: 'User saved successfully', data: savedUser })
     }
@@ -65,10 +64,10 @@ authRouter.post('/login', async (req, res) => {
             //send the token to client , named as token 
             //setting cookie that will expire in 7 days
             res.cookie("token", token, {
-                httpOnly: true,  // Prevents JavaScript from accessing the cookie
-                secure: false, // Only secure in production
-                sameSite: "Lax", // Adjust based on frontend/backend domain
-                maxAge: 168 * 3600000, // 7 days
+                httpOnly: true,
+                secure: true,  // ✅ Required for cross-site cookies
+                sameSite: "None",  // ✅ Required for cross-site cookies
+                maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ Persist for 7 days
             });
             // res.cookie("token", token, {
             //     sameSite: "None",
