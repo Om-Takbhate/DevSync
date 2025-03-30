@@ -12,7 +12,8 @@ app.use(cookieParser())
 app.use(cors({
     origin: 'https://devsync-ui.onrender.com', // ✅ Allow frontend origin
     credentials: true,
-    methods: ['GET','POST','PATCH','UPDATE']
+    methods: ['GET','POST','PATCH','UPDATE'],
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization" // ✅ Allow required headers
 }));
 
 
