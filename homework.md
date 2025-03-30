@@ -94,3 +94,30 @@ difference between put and patch HTTP method
 ///// review request route
 - implement /request/review/:status/:requestId route -> make sure toUserId is same as _id of loggedInUser , the status of request is interested and the id of request is equal to requestId , then only we can review request 
 - make sure status is either "accept" or "reject" of request route or path
+
+
+
+
+
+
+//////////////////////////////////////////////////
+
+
+
+CORS setup
+
+- add the middleware in backend by installing a cors package
+- setup the cors
+- app.use(cors({
+    origin: 'ulr of frontend', // ex - http://localhost:5173
+    credentials:true
+}))
+
+//front end setup
+
+during api call from frontend using axios.post, send the third argument as a object with option - 
+{
+    withCredentials: true
+}
+
+

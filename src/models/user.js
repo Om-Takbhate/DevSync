@@ -57,13 +57,21 @@ const userSchema = new mongoose.Schema({
         type:String,
         default : "This is default about user",
         maxLength : 100,
-        trim : true
+        trim : true,
+        required: true
     },
     skills : {
         type: [String],
         default : [],
         validate : (skills)=>{
             if(skills.length > 10) throw new Error("Skills should not be greator than 10")
+        }
+    },
+    education: {
+        type: [Object],
+        default: [],
+        validate: (education)=>{
+            if(education.length > 2) throw new Error('Cannot add more than 2 educational info')
         }
     }
 
@@ -77,6 +85,7 @@ userSchema.methods.getJWT = async function() {
 
 userSchema.methods.validatePassword = async function(password) {
     const user = this
+    if(user == null) return false
     let isPasswordMatching = await bcrypt.compare(password,user.password)
     return isPasswordMatching
 }

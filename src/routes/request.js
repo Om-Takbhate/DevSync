@@ -44,7 +44,7 @@ requestRouter.post('/request/send/:status/:toUserId',userAuth,async (req,res)=>{
         })
 
         const data = await connectionRequest.save()
-        res.json({message : `Connection request sent successfuly by ${req.user.firstName} ${req.user.lastName}` , data : data})
+        res.json({message : `Connection request ${status == "ignored" ? "rejected" : "sent"} successfuly to ${toUser.firstName} ${toUser.lastName}` , data : data})
             
     }
     catch(err) {

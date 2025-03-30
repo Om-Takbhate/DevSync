@@ -1,58 +1,86 @@
 const express = require('express')
 const profileRouter = express.Router()
 const bcrypt = require('bcrypt')
-const {validateProfileEditData} = require('../utils/validation.js')
-const {User} = require('../models/user.js')
+const { validateProfileEditData } = require('../utils/validation.js')
+const { User } = require('../models/user.js')
 const userAuth = require('../middlewares/auth.js')
 
-profileRouter.get('/profile/view',userAuth,async (req,res)=>{
+profileRouter.get('/profile/view', userAuth, async (req, res) => {
     try {
         let user = req.user
-        if(!user) throw new Error('Pls loggin first XYZ')
+        if (!user) throw new Error('Pls loggin first XYZ')
         res.send(user)
     }
-    catch(err) {
+    catch (err) {
         next(err)
     }
 })
 
-profileRouter.patch('/profile/edit',userAuth,async (req,res) => {
+profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
     //validate profile edit data
-    
-    try{
-        if(!validateProfileEditData(req)) {
-            throw new Error("Invalid update request")
-        } 
 
-        const loggedInUser = req.user
-        Object.keys(req.body).forEach(key => (loggedInUser[key] = req.body[key]))
-        let user = await User.findByIdAndUpdate(loggedInUser._id , loggedInUser,{runValidators : true})
-        req.user = user
-        res.send(`${loggedInUser.firstName} your profile is update successfully`)
+    try {
+        if (!validateProfileEditData(req)) {
+            throw new Error("Invalid update request")
+        }
+
         
+        const loggedInUser = req.user
+
+        Object.keys(req.body).forEach(key => (loggedInUser[key] = req.body[key]))
+        if(Object.keys(req.body).includes("skills")){
+            const skillsArr = req.body.skills.split(',')
+            loggedInUser['skills'] = skillsArr
+            
+        }
+        if(Object.keys(req.body).includes('education')) {
+            loggedInUser['education'] = req.body.education
+        }
+        let user = await User.findByIdAndUpdate(loggedInUser._id, loggedInUser, { runValidators: true, returnDocument:'after'})
+        req.user = user
+        res.send({user, message: 'Your profile has been updated successfuly'})
+
     }
-    catch(err) {
+    catch (err) {
         res.status(400).send(err.message)
+    }
+})
+
+profileRouter.get('/profile/:id', userAuth, async (req, res, next) => {
+    const { id } = req.params
+    try {
+        const user = await User.findById(id).select('firstName about lastName gender photoUrl skills education')
+        if (!user) {
+            return res.status(400).send({
+                message: "No user found"
+            })
+        }
+        res.send({
+            data: user
+        })
+    }
+    catch (err) {
+        next(err)
     }
 })
 
 
 //password edit route
-profileRouter.patch('/profile/edit/password',userAuth,async (req,res) => {
+profileRouter.patch('/profile/edit/password', userAuth, async (req, res) => {
     try {
-        let {currentPassword , newPassword} = req.body
-        let isPasswordMatch = await bcrypt.compare(currentPassword,req.user.password)
-        if(!isPasswordMatch) throw new Error('Invalid Credentials! Failed to update the password')
+        let { currentPassword, newPassword } = req.body
+        let isPasswordMatch = await bcrypt.compare(currentPassword, req.user.password)
+        if (!isPasswordMatch) throw new Error('Invalid Credentials! Failed to update the password')
 
         //password is correct
-        let newHashedPassword = await bcrypt.hash(newPassword,11)
-        let user = await User.findByIdAndUpdate(req.user._id , {password : newHashedPassword}, {returnDocument : 'after'})
-        res.cookie("token",null,{expires : new Date(Date.now())})
-        res.json({data : "password updated successful" , data : user})
+        let newHashedPassword = await bcrypt.hash(newPassword, 11)
+        let user = await User.findByIdAndUpdate(req.user._id, { password: newHashedPassword }, { returnDocument: 'after' })
+        res.cookie("token", null, { expires: new Date(Date.now()) })
+        res.json({ data: "password updated successful", data: user })
 
     }
-    catch(err) {
-        res.status(400).send({error : err.message})
+    catch (err) {
+        res.status(400).send({ error: err.message })
     }
 })
 

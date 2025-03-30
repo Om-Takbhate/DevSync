@@ -10,11 +10,14 @@ const USER_SAFE_DATA = ["firstName","lastName","gender","age","photoUrl","about"
 //get all the pending requests of the loggedin user
 userRouter.get('/user/requests/recieved',userAuth, async (req,res) => {
     try {
+        const {page} = req.query || 1
+        const limit = 10
         const loggedInUser = req.user
         const requests = await ConnectionRequest.find({
             toUserId : loggedInUser._id , 
             status : "interested"
-        }).populate("fromUserId",USER_SAFE_DATA)
+        })
+        .populate("fromUserId",USER_SAFE_DATA)
         res.send({count : requests.length , data : requests})
     }
     catch(err) {
@@ -24,6 +27,8 @@ userRouter.get('/user/requests/recieved',userAuth, async (req,res) => {
 
 userRouter.get('/user/connections',userAuth,async (req,res)=>{
     try {
+        let {page} = req.query || 1
+        const limit = 10
         const loggedInUser = req.user
         const connections = await ConnectionRequest.find({
             $or : [
@@ -36,8 +41,8 @@ userRouter.get('/user/connections',userAuth,async (req,res)=>{
                     status : "accepted"
                 }
             ]
-        }).
-        populate("fromUserId",USER_SAFE_DATA)
+        })
+        .populate("fromUserId",USER_SAFE_DATA)
         .populate("toUserId",USER_SAFE_DATA)
 
 
@@ -45,7 +50,7 @@ userRouter.get('/user/connections',userAuth,async (req,res)=>{
         //so modify the connection array that also contains the request info
 
         const data = connections.map(request => {
-            if(request.fromUserId._id.equals(loggedInUser._id)) {
+            if(request?.fromUserId?._id?.equals(loggedInUser._id)) {
                 return request.toUserId
             }
             else{
@@ -56,6 +61,7 @@ userRouter.get('/user/connections',userAuth,async (req,res)=>{
         res.send({count: data.length , data})
     }
     catch(err) {
+        console.log(err)
         res.status(400).send({error : err.message})
     }
 })
@@ -67,8 +73,6 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //user must not get profile who have sent them request or of users to whom logged in user has sent the request
 
         const loggedInUser = req.user;
-        let page = req.query.page || 1
-        let limit = 10
 
         const connectionRequests = await ConnectionRequest.find({
             $or : [
@@ -92,7 +96,7 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //finding users whose _id is not present in hiddenUsersFromFeed
         const feedData = await User.find({
             _id : {$nin : Array.from(hiddeUsersFromFeed)}
-        }).skip((page-1)*limit).limit(limit).select("fromUserId , toUserId ").select(USER_SAFE_DATA)
+        }).select("fromUserId , toUserId ").select(USER_SAFE_DATA)
 
         //implementing pagination
 

@@ -6,13 +6,15 @@ const cors = require('cors')
 
 const app = express()
 
-app.use(cors({
-        origin : "http://localhost:5173",
-        credentials : true
-    })
-)
 app.use(express.json())
 app.use(cookieParser())
+
+app.use(cors({
+    origin: 'http://localhost:5173', // ✅ Allow frontend origin
+    credentials: true
+}));
+
+
 
 
 const authRouter = require('./routes/auth.js')
@@ -26,13 +28,14 @@ app.use('/',requestRouter)
 app.use('/',userRouter)
 
 app.use((err,req,res,next)=>{
+    console.log(err)
     res.status(400).send(`Something went wrong - ${err.message}`)
 })
 
 connectToDB()
     .then(()=>{
         console.log('DB connected successfuly');
-        app.listen(process.env.port,()=>{
+        app.listen(process.env.port,'0.0.0.0',()=>{
             console.log(`app is listening on port ${process.env.port}`);
         })
     })

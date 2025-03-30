@@ -8,9 +8,8 @@ const userAuth = async(req,res,next)=>{
 
         //extract token from req cookies
         let {token} = req.cookies
-        
         //if token is not present
-        if(!token) throw new Error('Invalid token present! Pls login again')
+        if(!token) return res.status(401).send('Pls login!')
 
         //so the token is present
         //verify the token
@@ -21,7 +20,7 @@ const userAuth = async(req,res,next)=>{
 
         let user = await User.findById(_id)
 
-        if(!user) throw new Error('Pls login first brother')
+        if(!user) throw new Error('Pls login first again')
         req.user = user
         next()
     }
