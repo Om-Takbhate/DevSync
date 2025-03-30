@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin: 'https://devsync-ui.onrender.com/', // ✅ Allow frontend origin
+    origin: 'https://devsync-ui.onrender.com', // ✅ Allow frontend origin
     credentials: true
 }));
 
