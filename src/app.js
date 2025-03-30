@@ -10,7 +10,7 @@ app.use(cors({
     origin: 'https://devsync-ui.onrender.com', // ✅ Allow frontend origin
     credentials: true,
     methods: ['GET','POST','PATCH','UPDATE'],
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization" // ✅ Allow required headers
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"] // ✅ Changed string to array
 }));
 app.use(express.json())
 app.use(cookieParser())
