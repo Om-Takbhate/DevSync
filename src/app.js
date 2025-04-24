@@ -7,7 +7,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(cors({
-    origin: ["https://devsync-ui.onrender.com", "http://localhost:3000"], // ✅ Allowed frontend URLs
+    origin: ["https://devsync-ui.onrender.com", "http://localhost:5173"], // ✅ Allowed frontend URLs
     credentials: true // ✅ Required for sending cookies
 }));
 
