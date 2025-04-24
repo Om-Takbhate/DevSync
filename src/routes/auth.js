@@ -88,8 +88,8 @@ authRouter.post('/login', async (req, res) => {
 authRouter.post("/logout", (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
-        secure: false, // Secure flag in production
-        sameSite: "Lax" // Important if frontend & backend are on different domains
+        secure: true, // Secure flag in production
+        sameSite: "None" // Important if frontend & backend are on different domains
     });
     res.send({ data: 'Logout successful' })
 })
