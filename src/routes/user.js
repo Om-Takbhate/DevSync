@@ -72,6 +72,11 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //user must not get his connections profiles in feed
         //user must not get profile who have sent them request or of users to whom logged in user has sent the request
 
+        const pageNo = req.query?.page || 1
+        const limit = 10
+
+        console.log(pageNo)
+
         const loggedInUser = req.user;
 
         const connectionRequests = await ConnectionRequest.find({
@@ -96,7 +101,7 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
         //finding users whose _id is not present in hiddenUsersFromFeed
         const feedData = await User.find({
             _id : {$nin : Array.from(hiddeUsersFromFeed)}
-        }).select("fromUserId , toUserId ").select(USER_SAFE_DATA)
+        }).select("fromUserId , toUserId ").select(USER_SAFE_DATA).skip((pageNo - 1) * limit).limit(limit)
 
         //implementing pagination
 
