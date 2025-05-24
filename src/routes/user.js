@@ -74,9 +74,7 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
 
         const pageNo = req.query?.page || 1
         const limit = 10
-
-        console.log(pageNo)
-
+        
         const loggedInUser = req.user;
 
         const connectionRequests = await ConnectionRequest.find({

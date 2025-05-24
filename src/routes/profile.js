@@ -3,6 +3,7 @@ const profileRouter = express.Router()
 const bcrypt = require('bcrypt')
 const { validateProfileEditData } = require('../utils/validation.js')
 const { User } = require('../models/user.js')
+const { ConnectionRequest } = require('../models/connectionRequest.js')
 const userAuth = require('../middlewares/auth.js')
 
 profileRouter.get('/profile/view', userAuth, async (req, res) => {
@@ -24,21 +25,21 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
             throw new Error("Invalid update request")
         }
 
-        
+
         const loggedInUser = req.user
 
         Object.keys(req.body).forEach(key => (loggedInUser[key] = req.body[key]))
-        if(Object.keys(req.body).includes("skills")){
+        if (Object.keys(req.body).includes("skills")) {
             const skillsArr = req.body.skills.split(',')
             loggedInUser['skills'] = skillsArr
-            
+
         }
-        if(Object.keys(req.body).includes('education')) {
+        if (Object.keys(req.body).includes('education')) {
             loggedInUser['education'] = req.body.education
         }
-        let user = await User.findByIdAndUpdate(loggedInUser._id, loggedInUser, { runValidators: true, returnDocument:'after'})
+        let user = await User.findByIdAndUpdate(loggedInUser._id, loggedInUser, { runValidators: true, returnDocument: 'after' })
         req.user = user
-        res.send({user, message: 'Your profile has been updated successfuly'})
+        res.send({ user, message: 'Your profile has been updated successfuly' })
 
     }
     catch (err) {
@@ -47,6 +48,7 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
 })
 
 profileRouter.get('/profile/:id', userAuth, async (req, res, next) => {
+    const loggedInUser = req.user
     const { id } = req.params
     try {
         const user = await User.findById(id).select('firstName about lastName gender photoUrl skills education')
@@ -55,8 +57,24 @@ profileRouter.get('/profile/:id', userAuth, async (req, res, next) => {
                 message: "No user found"
             })
         }
+        const connectionRequest = await ConnectionRequest.findOne({
+            $or: [
+                {
+                    fromUserId: loggedInUser._id,
+                    toUserId: id,
+                    status: "accepted"
+                },
+                {
+                    fromUserId: id,
+                    toUserId: loggedInUser._id,
+                    status: "accepted"
+                }
+            ]
+        })
+
         res.send({
-            data: user
+            data: user,
+            isConnected: connectionRequest != null
         })
     }
     catch (err) {
