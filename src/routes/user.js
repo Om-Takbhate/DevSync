@@ -30,6 +30,8 @@ userRouter.get('/user/connections',userAuth,async (req,res)=>{
         let {page} = req.query || 1
         const limit = 10
         const loggedInUser = req.user
+
+
         const connections = await ConnectionRequest.find({
             $or : [
                 {
@@ -41,9 +43,10 @@ userRouter.get('/user/connections',userAuth,async (req,res)=>{
                     status : "accepted"
                 }
             ]
-        })
+        }).skip((page - 1) * limit).limit(limit)
         .populate("fromUserId",USER_SAFE_DATA)
         .populate("toUserId",USER_SAFE_DATA)
+        .sort({createdAt: -1})
 
 
         //we just need data of users that are connected to loggedIn user
