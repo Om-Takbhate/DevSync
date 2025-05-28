@@ -132,8 +132,6 @@ userRouter.get('/user/search', async(req,res) => {
         ]
     }).select("-password -emailId")
 
-    console.log(profiles);
-
     res.send({
         message: `Fetched users with name ${name}`,
         data: profiles
