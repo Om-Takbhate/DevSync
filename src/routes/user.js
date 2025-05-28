@@ -115,4 +115,31 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
     }
 })
 
+userRouter.get('/user/search', async(req,res) => {
+    const name = req.query?.name
+
+    
+    if(!name) return res.send({
+        message: "No search query given"
+    })
+    
+    const [firstName, lastName] = name.split(" ")
+    
+    const profiles = await User.find({
+        $or: [
+            {firstName: {$regex: firstName, $options: 'i'}},
+            {lastName: {$regex: lastName, $options: 'i'}}
+        ]
+    }).select("-password -emailId")
+
+    console.log(profiles);
+
+    res.send({
+        message: `Fetched users with name ${name}`,
+        data: profiles
+
+    })
+
+})
+
 module.exports = userRouter
