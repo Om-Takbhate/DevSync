@@ -6,7 +6,7 @@ const cors = require('cors')
 
 const app = express()
 
-app.use("/health",(req,res)=>{
+app.get("/health",(req,res)=>{
     res.send({
         message: 'All Ok'
     })
