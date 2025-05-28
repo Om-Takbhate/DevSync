@@ -7,24 +7,24 @@ const cors = require('cors')
 
 const app = express()
 
-app.get("/health",async (req,res)=>{
-    await fs.appendFile("./PingLog.txt", (new Date(Date.now())).toLocaleString(), (err,data) => {
-        if(err) {
-            res.status(400).send({
-                message: "Something went wrong"
-            })
-        }
-    })
-    res.send({
-        message: 'All Ok'
-    })
-})
 
 app.use(cors({
     origin: "https://devsync-ui.onrender.com",
     credentials: true
 }));
 
+app.get("/health",async (req,res)=>{
+    await fs.appendFile("./PingLog.txt", (new Date(Date.now())).toLocaleString(), (err,data) => {
+        if(err) {
+            res.status(400).send({
+                message: "Something went wrong"
+            })    
+        }    
+    })    
+    res.send({
+        message: 'All Ok'
+    })    
+})    
 
 
 app.use(express.json())
