@@ -6,10 +6,18 @@ const cors = require('cors')
 
 const app = express()
 
+app.use("/health",(req,res)=>{
+    res.send({
+        message: 'All Ok'
+    })
+})
+
 app.use(cors({
     origin: "https://devsync-ui.onrender.com",
     credentials: true
 }));
+
+
 
 app.use(express.json())
 app.use(cookieParser())
