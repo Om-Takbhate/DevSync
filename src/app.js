@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const fs = require('fs')
+const fs = require('fs').promises
 const { connectToDB } = require('./config/database.js')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
@@ -17,10 +17,7 @@ app.get("/health", async (req, res) => {
     try {
         await fs.appendFile(
             "./PingLog.txt",
-            `${new Date().toLocaleString()} - Health check pinged\n`,
-            (err,data) => {
-                console.log("data : "+ data);
-            }
+            `${new Date().toLocaleString()} - Health check pinged\n`
         );
         res.status(200).send({ message: 'All Ok' });
     } catch (err) {
