@@ -118,16 +118,15 @@ userRouter.get('/user/feed',userAuth,async(req,res)=>{
 userRouter.get('/user/search', async(req,res) => {
     const name = req.query?.name
 
+    const nameParts = name.trim().split(/\s+/)
+    console.log(nameParts);
     
-    if(!name) return res.send({
+    if(nameParts.length == 0 || nameParts[0] == '') return res.send({
         message: "No search query given"
     })
     
-    const nameParts = name.trim().split(/\s+/)
 
     let result ;
-    console.log("HEllo");
-
     if(nameParts.length == 1) {
         const searchTerm = nameParts[0]
 
