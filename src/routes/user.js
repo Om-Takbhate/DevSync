@@ -123,18 +123,37 @@ userRouter.get('/user/search', async(req,res) => {
         message: "No search query given"
     })
     
-    const [firstName, lastName] = name.split(" ")
-    
-    const profiles = await User.find({
-        $or: [
-            {firstName: {$regex: firstName, $options: 'i'}},
-            {lastName: {$regex: lastName, $options: 'i'}}
-        ]
-    }).select("-password -emailId")
+    const nameParts = name.trim().split(/\s+/)
+
+    let result ;
+    console.log("HEllo");
+
+    if(nameParts.length == 1) {
+        const searchTerm = nameParts[0]
+
+        result = await User.find({
+            $or: [
+                { firstName: {$regex: searchTerm, $options: 'i'}},
+                { lastName: {$regex: searchTerm, $options: 'i'}}
+            ]
+        }).select("-password -emailId")
+    }
+    else {
+        const firstName = nameParts[0]
+        const lastName = nameParts[nameParts.length - 1]
+        
+        result = await User.find({
+            $or: [
+                { firstName: {$regex: firstName, $options: 'i'}},
+                { lastName: {$regex: lastName, $options: 'i'}}
+            ]            
+        }).select("-password -emailId")
+        
+    }
 
     res.send({
         message: `Fetched users with name ${name}`,
-        data: profiles
+        data: result
 
     })
 
