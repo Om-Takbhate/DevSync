@@ -17,7 +17,10 @@ app.get("/health", async (req, res) => {
     try {
         await fs.appendFile(
             "./PingLog.txt",
-            `${new Date().toLocaleString()} - Health check pinged\n`
+            `${new Date().toLocaleString()} - Health check pinged\n`,
+            (err,data) => {
+                console.log("data : "+ data);
+            }
         );
         res.status(200).send({ message: 'All Ok' });
     } catch (err) {
